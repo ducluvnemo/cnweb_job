@@ -1,62 +1,66 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     fullName: {
-        type: String,
-        required: true
+      type: String,
+      required: false,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     phoneNumber: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: false,
     },
     password: {
-        type: String,
-        required: true,
+      type: String,
+      required: false,
     },
     role: {
-        type: String,
-        enum: ['student', 'recruiter'],
-        required: true,
+      type: String,
+      enum: ["student", "recruiter"],
+      required: true,
+      default: "student",
     },
     locked: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     deleted: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     profile: {
-        bio: {
-            type: String
+      bio: {
+        type: String,
+      },
+      skills: [
+        {
+          type: String,
         },
-        skills: [
-            {
-                type: String
-            }
-        ],
-        resume: {
-            type: String
-        }, //URL profile
-        resumeOriginalName: {
-            type: String
-        },
-        company: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Company',
-        },
-        profilePhoto: {
-            type: String,
-            default: ""
-        }
+      ],
+      resume: {
+        type: String,
+      }, //URL profile
+      resumeOriginalName: {
+        type: String,
+      },
+      company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+      },
+      profilePhoto: {
+        type: String,
+        default: "",
+      },
     },
-}, {
-    timestamps: true
-})
+  },
+  {
+    timestamps: true,
+  }
+);
 
-export const User = mongoose.model('User', userSchema);
+export const User = mongoose.model("User", userSchema);
