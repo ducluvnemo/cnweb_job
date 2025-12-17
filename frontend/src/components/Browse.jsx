@@ -9,7 +9,7 @@ import { Search, Briefcase, MapPin, Building2 } from 'lucide-react';
 const Browse = () => {
     UseGetAllJobsSearch();
     const { allJobs, searchJobByQuery } = useSelector(store => store.job);
-    
+
     return (
         <div className='min-h-screen bg-gradient-to-br from-gray-50 to-orange-50'>
             <Navbar />
@@ -52,8 +52,8 @@ const Browse = () => {
                         <p className='text-gray-600 mb-6'>
                             Thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc của bạn
                         </p>
-                        <button 
-                            onClick={() => window.location.href = '/'} 
+                        <button
+                            onClick={() => window.location.href = '/'}
                             className='px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300'
                         >
                             Quay về trang chủ

@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, User, Mail, Phone, FileText, Award, Briefcase } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setLoading } from './redux/authSlice';
@@ -90,14 +90,22 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
     return (
         <Dialog open={open}>
-            <DialogContent className='sm:max-w-[425px]' onInteractOutside={() => setOpen(false)}>
-                <DialogHeader>
-                    <DialogTitle>Update Profile</DialogTitle>
+            <DialogContent className='sm:max-w-[500px] p-0 overflow-hidden' onInteractOutside={() => setOpen(false)}>
+                <DialogHeader className='bg-gradient-to-r from-orange-500 to-red-500 p-6 text-white'>
+                    <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
+                        <User className='w-6 h-6' />
+                        Cập nhật hồ sơ
+                    </DialogTitle>
+                    <p className='text-orange-50 text-sm mt-2'>Điền thông tin của bạn để cập nhật hồ sơ</p>
                 </DialogHeader>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className='grid gap-4 py-4'>
-                        <div className='grid grid-cols-4 items-center gap-4'>
-                            <Label htmlFor='fullName' className='text-left'>Full Name</Label>
+                <form onSubmit={handleSubmit(onSubmit)} className='p-6'>
+                    <div className='space-y-5'>
+                        {/* Full Name */}
+                        <div className='space-y-2'>
+                            <Label htmlFor='fullName' className='text-sm font-semibold text-gray-700 flex items-center gap-2'>
+                                <User className='w-4 h-4 text-orange-600' />
+                                Họ và tên
+                            </Label>
                             <Input
                                 type='text'
                                 id='fullName'
@@ -105,11 +113,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 defaultValue={dataUser.fullName}
                                 onChange={handleInputChange}
                                 {...register("fullName")}
-                                className='col-span-3'
+                                className='w-full focus:ring-2 focus:ring-orange-500 border-gray-300'
+                                placeholder='Nhập họ và tên'
                             />
                         </div>
-                        <div className='grid grid-cols-4 items-center gap-4'>
-                            <Label htmlFor='email' className='text-left'>Email</Label>
+
+                        {/* Email */}
+                        <div className='space-y-2'>
+                            <Label htmlFor='email' className='text-sm font-semibold text-gray-700 flex items-center gap-2'>
+                                <Mail className='w-4 h-4 text-orange-600' />
+                                Email
+                            </Label>
                             <Input
                                 type='email'
                                 id='email'
@@ -117,11 +131,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 defaultValue={dataUser.email}
                                 onChange={handleInputChange}
                                 {...register("email")}
-                                className='col-span-3'
+                                className='w-full focus:ring-2 focus:ring-orange-500 border-gray-300'
+                                placeholder='email@example.com'
                             />
                         </div>
-                        <div className='grid grid-cols-4 items-center gap-4'>
-                            <Label htmlFor='phoneNumber' className='text-left'>Phone Number</Label>
+
+                        {/* Phone Number */}
+                        <div className='space-y-2'>
+                            <Label htmlFor='phoneNumber' className='text-sm font-semibold text-gray-700 flex items-center gap-2'>
+                                <Phone className='w-4 h-4 text-orange-600' />
+                                Số điện thoại
+                            </Label>
                             <Input
                                 type='text'
                                 id='phoneNumber'
@@ -129,11 +149,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 defaultValue={dataUser.phoneNumber}
                                 onChange={handleInputChange}
                                 {...register("phoneNumber")}
-                                className='col-span-3'
+                                className='w-full focus:ring-2 focus:ring-orange-500 border-gray-300'
+                                placeholder='0123456789'
                             />
                         </div>
-                        <div className='grid grid-cols-4 items-center gap-4'>
-                            <Label htmlFor='bio' className='text-left'>Bio</Label>
+
+                        {/* Bio */}
+                        <div className='space-y-2'>
+                            <Label htmlFor='bio' className='text-sm font-semibold text-gray-700 flex items-center gap-2'>
+                                <Briefcase className='w-4 h-4 text-orange-600' />
+                                Giới thiệu
+                            </Label>
                             <Input
                                 type='text'
                                 id='bio'
@@ -141,11 +167,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 defaultValue={dataUser.bio}
                                 onChange={handleInputChange}
                                 {...register("bio")}
-                                className='col-span-3'
+                                className='w-full focus:ring-2 focus:ring-orange-500 border-gray-300'
+                                placeholder='Giới thiệu ngắn về bản thân'
                             />
                         </div>
-                        <div className='grid grid-cols-4 items-center gap-4'>
-                            <Label htmlFor='skills' className='text-left'>Skills</Label>
+
+                        {/* Skills */}
+                        <div className='space-y-2'>
+                            <Label htmlFor='skills' className='text-sm font-semibold text-gray-700 flex items-center gap-2'>
+                                <Award className='w-4 h-4 text-orange-600' />
+                                Kỹ năng
+                            </Label>
                             <Input
                                 type='text'
                                 id='skills'
@@ -153,28 +185,46 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 defaultValue={dataUser.skills}
                                 onChange={handleInputChange}
                                 {...register("skills")}
-                                className='col-span-3'
+                                className='w-full focus:ring-2 focus:ring-orange-500 border-gray-300'
+                                placeholder='React, Node.js, Python (phân cách bằng dấu phẩy)'
                             />
                         </div>
-                        <div className='grid grid-cols-4 items-center gap-4'>
-                            <Label htmlFor="file" className='text-left'>Resume</Label>
+
+                        {/* Resume */}
+                        <div className='space-y-2'>
+                            <Label htmlFor="file" className='text-sm font-semibold text-gray-700 flex items-center gap-2'>
+                                <FileText className='w-4 h-4 text-orange-600' />
+                                Hồ sơ CV
+                            </Label>
                             <Input
                                 type="file"
                                 accept="application/pdf"
                                 id="file"
                                 name="resume"
                                 {...register("resume")}
-                                className='col-span-3'
+                                className='w-full focus:ring-2 focus:ring-orange-500 border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100'
                             />
+                            <p className='text-xs text-gray-500'>Chỉ chấp nhận file PDF</p>
                         </div>
                     </div>
-                    <DialogFooter>
+
+                    <DialogFooter className='mt-6 gap-2'>
+                        <Button
+                            type='button'
+                            variant='outline'
+                            onClick={() => setOpen(false)}
+                            className='flex-1 hover:bg-gray-100'
+                        >
+                            Hủy
+                        </Button>
                         {loading ? (
-                            <Button className='w-full my-4' disabled>
-                                <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Xin đợi 1 chút
+                            <Button className='flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white' disabled>
+                                <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Đang cập nhật...
                             </Button>
                         ) : (
-                            <Button className='w-full my-4' type="submit">Cập nhật</Button>
+                            <Button className='flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg' type="submit">
+                                Cập nhật
+                            </Button>
                         )}
                     </DialogFooter>
                 </form>

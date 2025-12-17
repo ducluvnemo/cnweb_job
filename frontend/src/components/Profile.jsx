@@ -68,7 +68,7 @@ const Profile = () => {
     return (
         <div className='bg-gradient-to-b from-gray-50 to-white min-h-screen'>
             <Navbar />
-            
+
             {/* Hero Section with Gradient Banner */}
             <div className='relative w-full h-48 bg-gradient-to-r from-orange-500 to-red-500 mb-[-80px]'>
                 <div className='absolute inset-0 bg-black/10'></div>
@@ -79,8 +79,8 @@ const Profile = () => {
             <div className='max-w-6xl mx-auto px-4'>
                 <div className='relative bg-white border border-gray-200 rounded-3xl shadow-2xl p-8 mb-6'>
                     {/* Edit Button */}
-                    <Button 
-                        onClick={() => setOpen(true)} 
+                    <Button
+                        onClick={() => setOpen(true)}
                         className='absolute top-6 right-6 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg'
                     >
                         <Edit3 className='w-4 h-4 mr-2' />
@@ -102,9 +102,9 @@ const Profile = () => {
                                     />
                                 </div>
                             </div>
-                            <Button 
-                                variant='outline' 
-                                className='gap-2 hover:border-orange-500 hover:text-orange-600 transition-all' 
+                            <Button
+                                variant='outline'
+                                className='gap-2 hover:border-orange-500 hover:text-orange-600 transition-all'
                                 onClick={handleButtonClick}
                             >
                                 <ImageUp className='w-4 h-4' />
@@ -142,7 +142,7 @@ const Profile = () => {
                                         <p className='text-sm text-gray-900 truncate'>{user?.email}</p>
                                     </div>
                                 </div>
-                                
+
                                 <div className='flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100'>
                                     <div className='w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0'>
                                         <Phone className='w-5 h-5 text-white' />
@@ -163,7 +163,7 @@ const Profile = () => {
                                 <div className='flex flex-wrap gap-2'>
                                     {user?.profile?.skills.length !== 0 ? (
                                         user?.profile?.skills.map((item, index) => (
-                                            <Badge 
+                                            <Badge
                                                 key={index}
                                                 className='bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 hover:from-orange-200 hover:to-red-200 border-0 px-4 py-2 text-sm font-medium'
                                             >
@@ -183,8 +183,8 @@ const Profile = () => {
                                     <h2 className='text-lg font-bold text-gray-900'>Hồ sơ CV</h2>
                                 </div>
                                 {isResume && user?.profile?.resume ? (
-                                    <a 
-                                        href={user?.profile?.resume} 
+                                    <a
+                                        href={user?.profile?.resume}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className='inline-flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl transition-all shadow-lg hover:shadow-xl group'

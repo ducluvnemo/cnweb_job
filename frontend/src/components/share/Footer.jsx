@@ -17,34 +17,34 @@ const Footer = () => {
                             Nền tảng tuyển dụng hàng đầu Việt Nam, kết nối hàng nghìn nhà tuyển dụng và ứng viên.
                         </p>
                         <div className='flex gap-3'>
-                            <a 
-                                href="https://facebook.com" 
+                            <a
+                                href="https://facebook.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className='w-10 h-10 bg-gray-800 hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110'
                             >
                                 <Facebook className='w-5 h-5' />
                             </a>
-                            <a 
+                            <a
                                 href="https://twitter.com"
                                 target="_blank"
-                                rel="noopener noreferrer" 
+                                rel="noopener noreferrer"
                                 className='w-10 h-10 bg-gray-800 hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110'
                             >
                                 <Twitter className='w-5 h-5' />
                             </a>
-                            <a 
+                            <a
                                 href="https://linkedin.com"
                                 target="_blank"
-                                rel="noopener noreferrer" 
+                                rel="noopener noreferrer"
                                 className='w-10 h-10 bg-gray-800 hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110'
                             >
                                 <Linkedin className='w-5 h-5' />
                             </a>
-                            <a 
+                            <a
                                 href="https://instagram.com"
                                 target="_blank"
-                                rel="noopener noreferrer" 
+                                rel="noopener noreferrer"
                                 className='w-10 h-10 bg-gray-800 hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110'
                             >
                                 <Instagram className='w-5 h-5' />
@@ -140,8 +140,8 @@ const Footer = () => {
                         <div className='mt-6'>
                             <p className='text-sm text-gray-400 mb-2'>Đăng ký nhận thông báo việc làm</p>
                             <div className='flex gap-2'>
-                                <input 
-                                    type="email" 
+                                <input
+                                    type="email"
                                     placeholder="Email của bạn"
                                     className='flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm focus:outline-none focus:border-orange-500 transition-colors'
                                 />

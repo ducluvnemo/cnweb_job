@@ -2,18 +2,18 @@ import React from 'react'
 import { Badge } from './ui/badge'
 import { MapPin, Briefcase, DollarSign, Building2, Clock, Users } from 'lucide-react'
 
-const LatestJobCards = ({job, onClick}) => {
+const LatestJobCards = ({ job, onClick }) => {
     return (
-        <div 
-            onClick={onClick} 
+        <div
+            onClick={onClick}
             className='group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100 overflow-hidden hover:-translate-y-2'
         >
             {/* Gradient Border on Hover */}
-            <div className='absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl' 
-                 style={{padding: '2px'}}>
+            <div className='absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl'
+                style={{ padding: '2px' }}>
                 <div className='bg-white rounded-2xl h-full w-full'></div>
             </div>
-            
+
             {/* Content */}
             <div className='relative p-6'>
                 {/* Company Header */}
@@ -21,9 +21,9 @@ const LatestJobCards = ({job, onClick}) => {
                     <div className='flex items-center gap-3'>
                         <div className='w-12 h-12 bg-gradient-to-br from-orange-100 to-red-100 rounded-xl flex items-center justify-center flex-shrink-0'>
                             {job?.company?.logo ? (
-                                <img 
-                                    src={job.company.logo} 
-                                    alt={job?.company?.name} 
+                                <img
+                                    src={job.company.logo}
+                                    alt={job?.company?.name}
                                     className='w-10 h-10 object-contain'
                                 />
                             ) : (
@@ -40,9 +40,9 @@ const LatestJobCards = ({job, onClick}) => {
                             </p>
                         </div>
                     </div>
-                    
+
                     {/* Save Button */}
-                    <button 
+                    <button
                         className='w-8 h-8 rounded-full bg-gray-100 hover:bg-orange-100 flex items-center justify-center transition-colors'
                         onClick={(e) => {
                             e.stopPropagation();

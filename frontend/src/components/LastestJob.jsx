@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Briefcase, TrendingUp } from 'lucide-react';
 
 const LastestJob = () => {
-    const {allJobs} = useSelector(store => store.job);
+    const { allJobs } = useSelector(store => store.job);
     const navigate = useNavigate();
 
     return (
@@ -17,7 +17,7 @@ const LastestJob = () => {
                     <span className='text-orange-600 font-semibold'>Việc làm mới nhất</span>
                 </div>
                 <h1 className='text-5xl font-extrabold mb-4'>
-                    <span className='bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent'>Cơ hội nghề nghiệp</span> 
+                    <span className='bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent'>Cơ hội nghề nghiệp</span>
                     {' '}hàng đầu
                 </h1>
                 <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
@@ -36,9 +36,9 @@ const LastestJob = () => {
                     </div>
                 ) : (
                     allJobs.slice(0, 6).map((item, index) => (
-                        <LatestJobCards 
-                            onClick={() => navigate(`/description/${item?._id}`)} 
-                            key={item?._id || index} 
+                        <LatestJobCards
+                            onClick={() => navigate(`/description/${item?._id}`)}
+                            key={item?._id || index}
                             job={item}
                         />
                     ))
@@ -48,7 +48,7 @@ const LastestJob = () => {
             {/* View All Button */}
             {allJobs.length > 6 && (
                 <div className='text-center mt-12'>
-                    <button 
+                    <button
                         onClick={() => navigate('/jobs')}
                         className='px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300'
                     >

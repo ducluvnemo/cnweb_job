@@ -51,11 +51,11 @@ const Job = ({ job }) => {
   return (
     <div className='group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100 overflow-hidden hover:-translate-y-1'>
       {/* Gradient Border on Hover */}
-      <div className='absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl' 
-           style={{padding: '2px'}}>
+      <div className='absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl'
+        style={{ padding: '2px' }}>
         <div className='bg-white rounded-2xl h-full w-full'></div>
       </div>
-      
+
       {/* Content */}
       <div className='relative p-6'>
         {/* Header - Date & Bookmark */}
@@ -71,11 +71,10 @@ const Job = ({ job }) => {
               e.stopPropagation();
               if (!save) handleAddLaterJob(job?._id, job?.company?._id);
             }}
-            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 ${
-              save 
-                ? 'bg-orange-100 text-orange-600' 
+            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 ${save
+                ? 'bg-orange-100 text-orange-600'
                 : 'bg-gray-100 hover:bg-orange-100 hover:text-orange-600'
-            }`}
+              }`}
           >
             {save ? <BookmarkCheck className='w-5 h-5' /> : <Bookmark className='w-5 h-5' />}
           </button>
@@ -131,8 +130,8 @@ const Job = ({ job }) => {
 
         {/* Action Buttons */}
         <div className='flex items-center gap-3 pt-4 border-t border-gray-100'>
-          <Button 
-            variant='outline' 
+          <Button
+            variant='outline'
             onClick={(e) => {
               e.stopPropagation();
               navigate(`/description/${jobId}`);
@@ -143,7 +142,7 @@ const Job = ({ job }) => {
             Chi tiết
           </Button>
           {!save && (
-            <Button 
+            <Button
               onClick={(e) => {
                 e.stopPropagation();
                 handleAddLaterJob(job?._id, job?.company?._id);

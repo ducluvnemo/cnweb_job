@@ -11,7 +11,7 @@ const ConversationList = ({ onClose, onSelectConversation }) => {
 
     // Fetch conversations
     useGetConversations();
-    
+
     console.log("Conversations loaded:", conversations);
 
     const handleSelectConversation = (conversation) => {
@@ -41,7 +41,7 @@ const ConversationList = ({ onClose, onSelectConversation }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-end justify-end md:items-center md:justify-end">
             {/* Backdrop */}
-            <div 
+            <div
                 className="fixed inset-0 bg-black/30"
                 onClick={onClose}
             ></div>
@@ -71,13 +71,12 @@ const ConversationList = ({ onClose, onSelectConversation }) => {
                                 <div
                                     key={idx}
                                     onClick={() => handleSelectConversation(conversation)}
-                                    className={`p-4 border-b hover:bg-gray-100 cursor-pointer transition active:bg-gray-200 ${
-                                        selectedConversation?.user?._id === conversation.user?._id ? 'bg-gray-100' : ''
-                                    }`}
+                                    className={`p-4 border-b hover:bg-gray-100 cursor-pointer transition active:bg-gray-200 ${selectedConversation?.user?._id === conversation.user?._id ? 'bg-gray-100' : ''
+                                        }`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <img 
-                                            src={conversation.user?.profile?.profilePhoto || 'https://via.placeholder.com/48'} 
+                                        <img
+                                            src={conversation.user?.profile?.profilePhoto || 'https://via.placeholder.com/48'}
                                             alt={conversation.user?.fullName}
                                             className="w-12 h-12 rounded-full object-cover"
                                         />
