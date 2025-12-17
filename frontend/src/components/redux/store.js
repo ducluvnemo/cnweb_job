@@ -18,6 +18,7 @@ import storage from 'redux-persist/lib/storage';
 import companySlice from "./companySlice";
 import applicantionSlice from "./applicantionSlice";
 import SaveForLaterJobSlice from "./SaveLaterJob";
+import chatSlice from "./chatSlice";
 
 const persistConfig = {
     key: 'root',
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     job: jobSlice,
     company: companySlice,
     application: applicantionSlice,
-    saveForLater: SaveForLaterJobSlice
+    saveForLater: SaveForLaterJobSlice,
+    chat: chatSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

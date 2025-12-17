@@ -13,6 +13,7 @@ import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
 import laterJobRoute from "./routes/laterJob.route.js";
 import authRoute from "./routes/auth.route.js";
+import messageRoute from "./routes/message.route.js";
 import session from "express-session";
 import passport from "passport";
 import "./utils/passport.js"; // đăng ký Google/GitHub strategies
@@ -64,6 +65,7 @@ app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/laterJob", laterJobRoute);
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/message", messageRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

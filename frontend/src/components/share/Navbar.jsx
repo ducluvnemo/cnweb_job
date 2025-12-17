@@ -1,8 +1,8 @@
 import { Popover } from "@radix-ui/react-popover";
-import React from "react";
+import React, { useState } from "react";
 import { PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { BookUser, LogOut, User2, UserRoundPlus } from "lucide-react";
+import { BookUser, LogOut, User2, UserRoundPlus, MessageCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,11 +12,14 @@ import { ToastAction } from "../ui/toast";
 import axios from "axios";
 import { USER_API_END_POINT } from "../utils/constant";
 import { setAuthUser } from "../redux/authSlice";
+import ConversationList from "../ConversationList";
+import ChatWindow from "../ChatWindow";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showConversations, setShowConversations] = useState(false);
 
   const avatar = user?.profile?.profilePhoto || "https://github.com/shadcn.png";
   // dùng avatar cho <img src={avatar} ... />
@@ -83,6 +86,15 @@ const Navbar = () => {
               </>
             )}
           </ul>
+          {user && (
+            <button
+              onClick={() => setShowConversations(true)}
+              className="p-2 hover:bg-gray-100 rounded-full transition relative"
+              title="Messages"
+            >
+              <MessageCircle className="w-6 h-6 text-gray-700" />
+            </button>
+          )}
           {!user ? (
             <div className="gap-2 flex items-center">
               <Link to="/login">
@@ -157,6 +169,16 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Chat Components */}
+      {showConversations && (
+        <ConversationList 
+          onClose={() => setShowConversations(false)}
+          onSelectConversation={() => {
+            // Keep conversation list open while chatting
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import {
 import {
     Job
 } from "../models/job.model.js";
+import { Message } from "../models/message.model.js";
 
 //[POST] /api/v1/application/apply/:id
 export const applyJob = async (req, res) => {
@@ -136,7 +137,7 @@ export const updateStatus = async (req,res) => {
         }
 
         //find the application by appicantion id
-        const application = await Application.findOne({_id: applicationId});
+        const application = await Application.findOne({_id: applicationId}).populate('applicant');
         if(!application){
             return res.status(404).json({
                 message: "Application not found!",
@@ -147,6 +148,23 @@ export const updateStatus = async (req,res) => {
         // update the status 
         application.status = status.toLowerCase();
         await application.save();
+
+        // If status is accepted, send automatic "hello" message
+        if(status.toLowerCase() === 'accepted') {
+            const recruiterId = req.id; // Current user is the recruiter
+            const applicantId = application.applicant._id;
+
+            try {
+                await Message.create({
+                    sender: recruiterId,
+                    receiver: applicantId,
+                    content: "hello"
+                });
+            } catch (error) {
+                console.log("Error sending message:", error);
+                // Don't fail the accept request if message fails
+            }
+        }
 
         return res.status(201).json({
             message: "Status updated successfully!",
