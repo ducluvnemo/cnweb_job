@@ -51,7 +51,7 @@ const ConversationList = ({ onClose, onSelectConversation }) => {
                 {/* Conversation List */}
                 <div className="bg-white w-full md:w-[350px] h-full flex flex-col">
                     {/* Header */}
-                    <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+                    <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-orange-500 to-red-500 text-white">
                         <div className="flex items-center gap-2">
                             <MessageCircle className="w-6 h-6" />
                             <h2 className="text-lg font-semibold">Messages</h2>

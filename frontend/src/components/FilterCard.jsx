@@ -107,7 +107,7 @@ const FilterCard = () => {
     return (
       <div className="w-full bg-white p-5 rounded-lg shadow-md">
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+          <Loader2 className="h-6 w-6 animate-spin text-orange-600" />
         </div>
       </div>
     );
@@ -115,7 +115,7 @@ const FilterCard = () => {
 
   return (
     <div className="w-full bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-5">
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 p-5">
         <h1 className="font-bold text-xl text-white flex items-center gap-2">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -127,7 +127,7 @@ const FilterCard = () => {
             variant="ghost"
             size="sm"
             onClick={clearAllFilters}
-            className="mt-2 text-white hover:bg-blue-500 hover:text-white text-sm"
+            className="mt-2 text-white hover:bg-orange-600 hover:text-white text-sm"
           >
             <X className="h-4 w-4 mr-1" />
             Xóa tất cả bộ lọc
@@ -140,7 +140,7 @@ const FilterCard = () => {
         <div className="border-b border-gray-200 pb-5">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-semibold text-lg text-gray-800 flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-blue-600" />
+              <MapPin className="h-5 w-5 text-orange-600" />
               Địa điểm
             </h2>
             {selectedValue.location && (
@@ -167,7 +167,7 @@ const FilterCard = () => {
                   <RadioGroupItem
                     value={province.province_name}
                     id={`location-${province.province_id}`}
-                    className="text-blue-600"
+                    className="text-orange-600"
                   />
                   <Label
                     htmlFor={`location-${province.province_id}`}
@@ -175,7 +175,7 @@ const FilterCard = () => {
                   >
                     {province.province_name}
                     {province.province_type === 'Thành phố Trung ương' && (
-                      <span className="ml-2 text-xs text-blue-600 font-medium">★</span>
+                      <span className="ml-2 text-xs text-orange-600 font-medium">★</span>
                     )}
                   </Label>
                 </div>
@@ -188,7 +188,7 @@ const FilterCard = () => {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-semibold text-lg text-gray-800 flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-blue-600" />
+              <Briefcase className="h-5 w-5 text-orange-600" />
               Vị trí
             </h2>
             {selectedValue.title && (
@@ -216,7 +216,7 @@ const FilterCard = () => {
                     <RadioGroupItem
                       value={position}
                       id={`position-${index}`}
-                      className="text-blue-600"
+                      className="text-orange-600"
                     />
                     <Label
                       htmlFor={`position-${index}`}

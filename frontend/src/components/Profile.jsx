@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import Navbar from './share/Navbar'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
-import { Contact, ImageUp, Mail, Pen } from 'lucide-react';
+import { Contact, ImageUp, Mail, Pen, FileText, Briefcase, Award, Phone, User, Edit3 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Label } from './ui/label';
 import AppliedJobTable from './AppliedJobTable';
@@ -66,21 +66,49 @@ const Profile = () => {
         }
     };
     return (
-        <div>
+        <div className='bg-gradient-to-b from-gray-50 to-white min-h-screen'>
             <Navbar />
-            <div className='max-w-7xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-xl my-5 p-8'>
-                <div className='flex justify-between'>
-                    <div className='flex items-center gap-4'>
-                        <div className='flex items-center flex-col'>
-                            <Image
-                                width={100}
-                                height={100}
-                                className='object-cover rounded-full'
-                                src={user.profile.profilePhoto ? (user.profile.profilePhoto) : ("https://github.com/shadcn.png")}
-                            />
-                            <Button variant='outline' className='gap-2 mt-5' onClick={handleButtonClick}>
-                                <ImageUp />
-                                <span>Upload image</span>
+            
+            {/* Hero Section with Gradient Banner */}
+            <div className='relative w-full h-48 bg-gradient-to-r from-orange-500 to-red-500 mb-[-80px]'>
+                <div className='absolute inset-0 bg-black/10'></div>
+                <div className='absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent'></div>
+            </div>
+
+            {/* Profile Card */}
+            <div className='max-w-6xl mx-auto px-4'>
+                <div className='relative bg-white border border-gray-200 rounded-3xl shadow-2xl p-8 mb-6'>
+                    {/* Edit Button */}
+                    <Button 
+                        onClick={() => setOpen(true)} 
+                        className='absolute top-6 right-6 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg'
+                    >
+                        <Edit3 className='w-4 h-4 mr-2' />
+                        Chỉnh sửa
+                    </Button>
+
+                    {/* Profile Header */}
+                    <div className='flex flex-col md:flex-row gap-8 items-start'>
+                        {/* Avatar Section */}
+                        <div className='flex flex-col items-center gap-4'>
+                            <div className='relative group'>
+                                <div className='absolute -inset-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full blur opacity-50 group-hover:opacity-75 transition duration-300'></div>
+                                <div className='relative'>
+                                    <Image
+                                        width={120}
+                                        height={120}
+                                        className='object-cover rounded-full ring-4 ring-white'
+                                        src={user.profile.profilePhoto ? (user.profile.profilePhoto) : ("https://github.com/shadcn.png")}
+                                    />
+                                </div>
+                            </div>
+                            <Button 
+                                variant='outline' 
+                                className='gap-2 hover:border-orange-500 hover:text-orange-600 transition-all' 
+                                onClick={handleButtonClick}
+                            >
+                                <ImageUp className='w-4 h-4' />
+                                <span>Đổi ảnh</span>
                             </Button>
                             <input
                                 type='file'
@@ -90,44 +118,111 @@ const Profile = () => {
                                 onChange={handleFileChange}
                             />
                         </div>
-                        <div>
-                            <h1 className='font-bold text-xl'>{user.fullName}</h1>
-                            <p>{user?.profile?.bio}</p>
+
+                        {/* Info Section */}
+                        <div className='flex-1 space-y-6'>
+                            {/* Name & Bio */}
+                            <div>
+                                <h1 className='font-bold text-3xl text-gray-900 mb-2 flex items-center gap-2'>
+                                    {user.fullName}
+                                </h1>
+                                <p className='text-gray-600 text-lg leading-relaxed'>
+                                    {user?.profile?.bio || 'Chưa có thông tin giới thiệu'}
+                                </p>
+                            </div>
+
+                            {/* Contact Info Grid */}
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                                <div className='flex items-center gap-3 p-3 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border border-orange-100'>
+                                    <div className='w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0'>
+                                        <Mail className='w-5 h-5 text-white' />
+                                    </div>
+                                    <div className='flex-1 min-w-0'>
+                                        <p className='text-xs text-gray-500 font-medium'>Email</p>
+                                        <p className='text-sm text-gray-900 truncate'>{user?.email}</p>
+                                    </div>
+                                </div>
+                                
+                                <div className='flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100'>
+                                    <div className='w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0'>
+                                        <Phone className='w-5 h-5 text-white' />
+                                    </div>
+                                    <div className='flex-1 min-w-0'>
+                                        <p className='text-xs text-gray-500 font-medium'>Số điện thoại</p>
+                                        <p className='text-sm text-gray-900'>{user?.phoneNumber || 'Chưa cập nhật'}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Skills Section */}
+                            <div className='space-y-3'>
+                                <div className='flex items-center gap-2'>
+                                    <Award className='w-5 h-5 text-orange-600' />
+                                    <h2 className='text-lg font-bold text-gray-900'>Kỹ năng</h2>
+                                </div>
+                                <div className='flex flex-wrap gap-2'>
+                                    {user?.profile?.skills.length !== 0 ? (
+                                        user?.profile?.skills.map((item, index) => (
+                                            <Badge 
+                                                key={index}
+                                                className='bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 hover:from-orange-200 hover:to-red-200 border-0 px-4 py-2 text-sm font-medium'
+                                            >
+                                                {item}
+                                            </Badge>
+                                        ))
+                                    ) : (
+                                        <span className='text-gray-500 italic'>Chưa có kỹ năng nào</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Resume Section */}
+                            <div className='space-y-3'>
+                                <div className='flex items-center gap-2'>
+                                    <FileText className='w-5 h-5 text-orange-600' />
+                                    <h2 className='text-lg font-bold text-gray-900'>Hồ sơ CV</h2>
+                                </div>
+                                {isResume && user?.profile?.resume ? (
+                                    <a 
+                                        href={user?.profile?.resume} 
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className='inline-flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl transition-all shadow-lg hover:shadow-xl group'
+                                    >
+                                        <FileText className='w-4 h-4' />
+                                        <span className='font-medium'>{user?.profile?.resumeOriginalName}</span>
+                                    </a>
+                                ) : (
+                                    <span className='text-gray-500 italic'>Chưa tải lên CV</span>
+                                )}
+                            </div>
                         </div>
                     </div>
-                    <Button onClick={() => setOpen(true)} variant="outline" className='text-right'><Pen /></Button>
                 </div>
-                <div className='my-5'>
-                    <div className='flex items-center gap-3 my-2'>
-                        <Mail />
-                        <span>{user?.email}</span>
+
+                {/* Applied Jobs Section */}
+                <div className='bg-white rounded-3xl border border-gray-200 shadow-xl p-8 mb-6'>
+                    <div className='flex items-center gap-3 mb-6'>
+                        <div className='w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center'>
+                            <Briefcase className='w-5 h-5 text-white' />
+                        </div>
+                        <h1 className='font-bold text-2xl text-gray-900'>Công việc đã ứng tuyển</h1>
                     </div>
-                    <div className='flex items-center gap-3 my-2'>
-                        <Contact />
-                        <span>{user?.phoneNumber}</span>
-                    </div>
+                    <AppliedJobTable />
                 </div>
-                <div>
-                    <h1 className='text-md font-bold'>Skills</h1>
-                    <div className='flex items-center gap-2 my-2'>
-                        {user?.profile?.skills.length !== 0 ? user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>) : <span>NA</span>}
+
+                {/* Saved Jobs Section */}
+                <div className='bg-white rounded-3xl border border-gray-200 shadow-xl p-8 mb-6'>
+                    <div className='flex items-center gap-3 mb-6'>
+                        <div className='w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center'>
+                            <FileText className='w-5 h-5 text-white' />
+                        </div>
+                        <h1 className='font-bold text-2xl text-gray-900'>Công việc đã lưu</h1>
                     </div>
-                </div>
-                <div className='flex flex-col mt-5'>
-                    <Label className='text-md font-bold'>Hồ sơ</Label>
-                    {
-                        isResume ? <a href={user?.profile?.resume} className='text-blue-600'>{user?.profile?.resumeOriginalName}</a> : <span>NA</span>
-                    }
+                    <LaterJobTable />
                 </div>
             </div>
-            <div className='max-w-7xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-xl my-5 p-8'>
-                <h1 className='font-bold text-lg my-5'>Công việc đã apply</h1>
-                <AppliedJobTable />
-            </div>
-            <div className='max-w-7xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-xl my-5 p-8'>
-                <h1 className='font-bold text-lg my-5'>Công việc đã lưu</h1>
-                <LaterJobTable />
-            </div>
+
             <UpdateProfileDialog open={open} setOpen={setOpen} />
         </div>
     )

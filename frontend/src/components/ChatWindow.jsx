@@ -78,7 +78,7 @@ const ChatWindow = ({ onClose, hideBackdrop = false }) => {
     const windowContent = (
         <div className={windowClass}>
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+            <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-orange-500 to-red-500 text-white">
                 <div className="flex items-center gap-3">
                     <img 
                         src={otherUser?.profile?.profilePhoto || 'https://via.placeholder.com/40'} 
@@ -110,13 +110,13 @@ const ChatWindow = ({ onClose, hideBackdrop = false }) => {
                             <div 
                                 className={`max-w-xs px-4 py-2 rounded-lg ${
                                     msg.sender?._id === user?._id
-                                        ? 'bg-blue-600 text-white rounded-br-none'
+                                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-br-none'
                                         : 'bg-gray-300 text-black rounded-bl-none'
                                 }`}
                             >
                                 <p className="text-sm break-words">{msg.content}</p>
                                 <p className={`text-xs mt-1 ${
-                                    msg.sender?._id === user?._id ? 'text-blue-100' : 'text-gray-500'
+                                    msg.sender?._id === user?._id ? 'text-orange-50' : 'text-gray-500'
                                 }`}>
                                     {new Date(msg.createdAt).toLocaleTimeString([], { 
                                         hour: '2-digit', 
@@ -141,13 +141,13 @@ const ChatWindow = ({ onClose, hideBackdrop = false }) => {
                         value={messageContent}
                         onChange={(e) => setMessageContent(e.target.value)}
                         placeholder="Type a message..."
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                         disabled={loading}
                     />
                     <Button
                         type="submit"
                         disabled={loading || !messageContent.trim()}
-                        className="bg-blue-600 hover:bg-blue-700 text-white p-2"
+                        className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white p-2"
                     >
                         {loading ? '...' : <Send className="w-5 h-5" />}
                     </Button>
