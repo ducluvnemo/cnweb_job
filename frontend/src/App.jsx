@@ -44,7 +44,7 @@ const appRouter = createBrowserRouter([
   { path: "/reset-password/:email", element: <ResetPassword /> },
   { path: "/jobs", element: <Jobs /> },
   { path: "/brower", element: <Browse /> },
-{
+  {
     path: "/admin/dashboard",
     element: (
       <ProtectedRoute roles={["admin"]}>
@@ -123,7 +123,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/companies",
     element: (
-      <ProtectedRoute roles={["recruiter"]}>
+      <ProtectedRoute roles={["recruiter", "admin"]}>
         <CompanyAdmin />
       </ProtectedRoute>
     ),
@@ -131,7 +131,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/companies/create",
     element: (
-      <ProtectedRoute roles={["recruiter"]}>
+      <ProtectedRoute roles={["recruiter", "admin"]}>
         <CreateCompany />
       </ProtectedRoute>
     ),
@@ -139,7 +139,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/companies/:id",
     element: (
-      <ProtectedRoute roles={["recruiter"]}>
+      <ProtectedRoute roles={["recruiter", "admin"]}>
         <CompanySetupData />
       </ProtectedRoute>
     ),
@@ -155,7 +155,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs",
     element: (
-      <ProtectedRoute roles={["recruiter"]}>
+      <ProtectedRoute roles={["recruiter", "admin"]}>
         <JobsAdmin />
       </ProtectedRoute>
     ),
@@ -163,7 +163,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs/:id",
     element: (
-      <ProtectedRoute roles={["recruiter"]}>
+      <ProtectedRoute roles={["recruiter", "admin"]}>
         <EditJob />
       </ProtectedRoute>
     ),
@@ -171,7 +171,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs/create",
     element: (
-      <ProtectedRoute roles={["recruiter"]}>
+      <ProtectedRoute roles={["recruiter", "admin"]}>
         <CreateJob />
       </ProtectedRoute>
     ),
@@ -179,7 +179,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs/:id/applicants",
     element: (
-      <ProtectedRoute roles={["recruiter"]}>
+      <ProtectedRoute roles={["recruiter", "admin"]}>
         <Applicants />
       </ProtectedRoute>
     ),

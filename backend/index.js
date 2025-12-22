@@ -29,7 +29,9 @@ database.connect();
 
 // ===== Middleware (đặt trước routes) =====
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use(cookieParser());
 
 app.use(
@@ -57,7 +59,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(methodOverride("_method"));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 // ===== Routes (đặt sau middleware) =====
 app.use("/api/v1/admin", adminRoute);

@@ -12,8 +12,14 @@ const cvSchema = new mongoose.Schema({
         default: 'professional'
     },
     personalInfo: {
-        fullName: { type: String, required: true },
-        email: { type: String, required: true },
+        fullName: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
         phone: String,
         address: String,
         website: String,
@@ -24,7 +30,10 @@ const cvSchema = new mongoose.Schema({
         company: String,
         startDate: String,
         endDate: String,
-        current: { type: Boolean, default: false },
+        current: {
+            type: Boolean,
+            default: false
+        },
         description: String
     }],
     education: [{
@@ -44,6 +53,8 @@ const cvSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     }
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
 
 export const CV = mongoose.model('CV', cvSchema);

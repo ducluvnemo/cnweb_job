@@ -1,10 +1,19 @@
-import { CV } from "../models/cv.model.js";
+import {
+    CV
+} from "../models/cv.model.js";
 
 // Tạo mới CV
 export const createCV = async (req, res) => {
     try {
         const userId = req.id; // từ middleware authentication
-        const { templateType, personalInfo, experiences, education, skills, certifications } = req.body;
+        const {
+            templateType,
+            personalInfo,
+            experiences,
+            education,
+            skills,
+            certifications
+        } = req.body;
 
         const cv = await CV.create({
             user: userId,
@@ -34,7 +43,11 @@ export const createCV = async (req, res) => {
 export const getMyCVs = async (req, res) => {
     try {
         const userId = req.id;
-        const cvs = await CV.find({ user: userId }).sort({ createdAt: -1 });
+        const cvs = await CV.find({
+            user: userId
+        }).sort({
+            createdAt: -1
+        });
 
         return res.status(200).json({
             success: true,
@@ -80,9 +93,19 @@ export const updateCV = async (req, res) => {
     try {
         const cvId = req.params.id;
         const userId = req.id;
-        const { templateType, personalInfo, experiences, education, skills, certifications } = req.body;
+        const {
+            templateType,
+            personalInfo,
+            experiences,
+            education,
+            skills,
+            certifications
+        } = req.body;
 
-        const cv = await CV.findOne({ _id: cvId, user: userId });
+        const cv = await CV.findOne({
+            _id: cvId,
+            user: userId
+        });
 
         if (!cv) {
             return res.status(404).json({
@@ -120,7 +143,10 @@ export const deleteCV = async (req, res) => {
         const cvId = req.params.id;
         const userId = req.id;
 
-        const cv = await CV.findOneAndDelete({ _id: cvId, user: userId });
+        const cv = await CV.findOneAndDelete({
+            _id: cvId,
+            user: userId
+        });
 
         if (!cv) {
             return res.status(404).json({

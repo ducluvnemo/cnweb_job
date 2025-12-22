@@ -1,6 +1,12 @@
 import express from "express";
 import isAuthenticated from "../middleware/isAuthenticated.js";
-import { createCV, getMyCVs, getCVById, updateCV, deleteCV } from "../controller/cv.controller.js";
+import {
+    createCV,
+    getMyCVs,
+    getCVById,
+    updateCV,
+    deleteCV
+} from "../controller/cv.controller.js";
 
 const router = express.Router();
 

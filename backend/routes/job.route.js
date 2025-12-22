@@ -7,6 +7,7 @@ import {
   getJobById,
   getJobByIdAdmin,
   getAdminJobs,
+  getAllJobsForAdmin,
   EditJob,
   deleteJob,
   getJobPositions,
@@ -26,6 +27,7 @@ router.get("/get/:id", getJobById);
 // recruiter self
 router.get("/getAdmin/:id", isAuthenticated, getJobByIdAdmin);
 router.get("/getAdminJob", isAuthenticated, getAdminJobs);
+router.get("/getAllJobsForAdmin", isAuthenticated, isAdmin, getAllJobsForAdmin);
 router.patch("/updateJob/:id", isAuthenticated, EditJob);
 router.delete("/deleteJob", isAuthenticated, deleteJob);
 

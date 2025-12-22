@@ -1,6 +1,5 @@
-import { Popover } from "@radix-ui/react-popover";
 import React, { useState } from "react";
-import { PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { BookUser, LogOut, User2, UserRoundPlus, MessageCircle, FileText } from "lucide-react";
 import { Button } from "../ui/button";
@@ -109,11 +108,13 @@ const Navbar = () => {
           ) : (
             <Popover>
               <PopoverTrigger asChild>
-                <Avatar className="cursor-pointer">
-                  <AvatarImage className="object-cover" src={avatar} />
-                </Avatar>
+                <button className="focus:outline-none">
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage className="object-cover" src={avatar} />
+                  </Avatar>
+                </button>
               </PopoverTrigger>
-              <PopoverContent>
+              <PopoverContent className="w-80">
                 <div>
                   <div className="flex gap-3 items-center">
                     <Avatar className="cursor-pointer">
@@ -144,7 +145,7 @@ const Navbar = () => {
                         </div>
                       </>
                     )}
-                    {user && user.role !== "student" && (
+                    {user && (user.role === "recruiter" || user.role === "admin") && (
                       <>
                         <div className="flex w-fit items-center gap-2 cursor-pointer mt-2">
                           <BookUser />
@@ -180,7 +181,7 @@ const Navbar = () => {
 
       {/* Chat Components */}
       {showConversations && (
-        <ConversationList 
+        <ConversationList
           onClose={() => setShowConversations(false)}
           onSelectConversation={() => {
             // Keep conversation list open while chatting

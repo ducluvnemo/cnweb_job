@@ -5,8 +5,8 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
-import { 
-  FileText, Download, Plus, X, User, Mail, Phone, MapPin, 
+import {
+  FileText, Download, Plus, X, User, Mail, Phone, MapPin,
   Briefcase, GraduationCap, Award, Globe, Calendar, Trash2, Save, ImageUp
 } from 'lucide-react';
 import { useSelector } from 'react-redux';
@@ -105,7 +105,7 @@ const CreateCV = () => {
   const updateExperience = (index, field, value) => {
     setCvData(prev => ({
       ...prev,
-      experiences: prev.experiences.map((exp, i) => 
+      experiences: prev.experiences.map((exp, i) =>
         i === index ? { ...exp, [field]: value } : exp
       )
     }));
@@ -134,7 +134,7 @@ const CreateCV = () => {
   const updateEducation = (index, field, value) => {
     setCvData(prev => ({
       ...prev,
-      education: prev.education.map((edu, i) => 
+      education: prev.education.map((edu, i) =>
         i === index ? { ...edu, [field]: value } : edu
       )
     }));
@@ -178,7 +178,7 @@ const CreateCV = () => {
   const updateCertification = (index, field, value) => {
     setCvData(prev => ({
       ...prev,
-      certifications: prev.certifications.map((cert, i) => 
+      certifications: prev.certifications.map((cert, i) =>
         i === index ? { ...cert, [field]: value } : cert
       )
     }));
@@ -227,7 +227,7 @@ const CreateCV = () => {
           status: "success",
           action: <ToastAction altText="OK">OK</ToastAction>,
         });
-        
+
         // Navigate to CV list or profile after save
         setTimeout(() => {
           navigate('/profile');
@@ -249,7 +249,7 @@ const CreateCV = () => {
     const printContent = cvPreviewRef.current;
     const originalContents = document.body.innerHTML;
     const printWindow = window.open('', '', 'height=600,width=800');
-    
+
     printWindow.document.write('<html><head><title>CV - ' + cvData.fullName + '</title>');
     printWindow.document.write('<style>');
     printWindow.document.write(`
@@ -273,10 +273,10 @@ const CreateCV = () => {
     printWindow.document.write('<div class="cv-container">');
     printWindow.document.write(printContent.innerHTML);
     printWindow.document.write('</div></body></html>');
-    
+
     printWindow.document.close();
     printWindow.focus();
-    
+
     setTimeout(() => {
       printWindow.print();
       printWindow.close();
@@ -286,7 +286,7 @@ const CreateCV = () => {
   return (
     <div className='bg-gradient-to-b from-gray-50 to-white min-h-screen'>
       <Navbar />
-      
+
       {/* Header */}
       <div className='bg-gradient-to-r from-orange-500 to-red-500 py-12'>
         <div className='max-w-7xl mx-auto px-4'>
@@ -301,7 +301,7 @@ const CreateCV = () => {
               </p>
             </div>
             <div className='flex gap-3'>
-              <Button 
+              <Button
                 onClick={handleSaveCV}
                 disabled={loading}
                 className='bg-white text-orange-600 hover:bg-orange-50 shadow-xl px-6 py-6 text-lg font-semibold'
@@ -309,7 +309,7 @@ const CreateCV = () => {
                 <Save className='w-5 h-5 mr-2' />
                 {loading ? 'Đang lưu...' : 'Lưu CV'}
               </Button>
-              <Button 
+              <Button
                 onClick={handleDownloadPDF}
                 className='bg-green-600 hover:bg-green-700 text-white shadow-xl px-6 py-6 text-lg font-semibold'
               >
@@ -336,11 +336,10 @@ const CreateCV = () => {
                   <button
                     key={key}
                     onClick={() => setSelectedTemplate(key)}
-                    className={`p-4 rounded-xl border-2 transition-all hover:shadow-lg ${
-                      selectedTemplate === key
+                    className={`p-4 rounded-xl border-2 transition-all hover:shadow-lg ${selectedTemplate === key
                         ? 'border-orange-500 bg-orange-50 shadow-lg'
                         : 'border-gray-200 hover:border-orange-300'
-                    }`}
+                      }`}
                   >
                     <div className='aspect-[3/4] bg-white rounded-lg mb-2 overflow-hidden border border-gray-200 relative'>
                       {/* Template Thumbnails */}
@@ -403,16 +402,16 @@ const CreateCV = () => {
                 <User className='w-6 h-6 text-orange-600' />
                 Thông tin cá nhân
               </h2>
-              
+
               {/* Avatar Upload - Only for Creative */}
               {selectedTemplate === 'creative' && (
                 <div className='mb-6 p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border-2 border-orange-200'>
-                  <Label className='text-sm font-semibold text-gray-700 mb-3 block flex items-center gap-2'>
+                  <Label className='text-sm font-semibold text-gray-700 mb-3 block items-center gap-2'>
                     <User className='w-4 h-4 text-orange-600' />
                     Ảnh đại diện (Bắt buộc cho mẫu Creative)
                   </Label>
                   <div className='flex items-center gap-4'>
-                    <div 
+                    <div
                       onClick={handleAvatarClick}
                       className='w-24 h-24 bg-gradient-to-br from-orange-200 to-red-200 rounded-full flex items-center justify-center cursor-pointer hover:from-orange-300 hover:to-red-300 transition-all border-4 border-white shadow-lg overflow-hidden'
                     >
@@ -814,7 +813,7 @@ const CreateCV = () => {
                   <h3 className='font-bold text-lg'>Xem trước CV</h3>
                   <p className='text-sm text-orange-50'>Mẫu: {CVTemplates[selectedTemplate]}</p>
                 </div>
-                
+
                 {/* CV Preview Content */}
                 <div ref={cvPreviewRef} className='p-6 bg-white' style={{ fontSize: '10px' }}>
                   {/* Simple Template */}
@@ -878,9 +877,9 @@ const CreateCV = () => {
                       <div className='text-center border-b-2 border-orange-500 pb-4'>
                         <h1 className='text-2xl font-bold text-gray-900 uppercase'>{cvData.fullName || 'HỌ VÀ TÊN'}</h1>
                         <div className='flex flex-wrap justify-center gap-2 mt-2 text-xs text-gray-600'>
-                          {cvData.phone && <span className='flex items-center gap-1'><Phone className='w-3 h-3'/>{cvData.phone}</span>}
-                          {cvData.email && <span className='flex items-center gap-1'><Mail className='w-3 h-3'/>{cvData.email}</span>}
-                          {cvData.address && <span className='flex items-center gap-1'><MapPin className='w-3 h-3'/>{cvData.address}</span>}
+                          {cvData.phone && <span className='flex items-center gap-1'><Phone className='w-3 h-3' />{cvData.phone}</span>}
+                          {cvData.email && <span className='flex items-center gap-1'><Mail className='w-3 h-3' />{cvData.email}</span>}
+                          {cvData.address && <span className='flex items-center gap-1'><MapPin className='w-3 h-3' />{cvData.address}</span>}
                         </div>
                       </div>
 

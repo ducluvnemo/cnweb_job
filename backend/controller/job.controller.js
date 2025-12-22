@@ -1,7 +1,15 @@
-import { Job } from "../models/job.model.js";
-import { User } from "../models/user.model.js";
-import { Company } from "../models/company.model.js";
-import { Activity } from "../models/activity.model.js";
+import {
+  Job
+} from "../models/job.model.js";
+import {
+  User
+} from "../models/user.model.js";
+import {
+  Company
+} from "../models/company.model.js";
+import {
+  Activity
+} from "../models/activity.model.js";
 
 // [POST] /api/v1/job/post
 export const postJob = async (req, res) => {
@@ -37,7 +45,9 @@ export const postJob = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ _id: userID });
+    const user = await User.findOne({
+      _id: userID
+    });
     if (!user) {
       return res.status(400).json({
         message: "User not found!",
@@ -117,17 +127,29 @@ export const getAllJobs = async (req, res) => {
     const value = req.query.Value || "";
 
     const query = {
-        status: { $ne: "REJECTED" },
-        [key]: { $regex: value, $options: "i" },
+      status: {
+        $ne: "REJECTED"
+      },
+      [key]: {
+        $regex: value,
+        $options: "i"
+      },
     };
 
     const jobs = await Job.find(query)
-      .populate({ path: "company" })
+      .populate({
+        path: "company"
+      })
       .populate({
         path: "applications",
-        populate: [{ path: "applicant", select: "fullName" }],
+        populate: [{
+          path: "applicant",
+          select: "fullName"
+        }],
       })
-      .sort({ createdAt: -1 });
+      .sort({
+        createdAt: -1
+      });
 
     if (!jobs || jobs.length === 0) {
       return res.status(404).json({
@@ -154,9 +176,14 @@ export const getJobById = async (req, res) => {
   try {
     const jobId = req.params.id;
 
-    const job = await Job.findById(jobId).populate([
-      { path: "applications", select: "applicant" },
-      { path: "company", select: "name logo description location website" },
+    const job = await Job.findById(jobId).populate([{
+        path: "applications",
+        select: "applicant"
+      },
+      {
+        path: "company",
+        select: "name logo description location website"
+      },
     ]);
 
     if (!job) {
@@ -188,9 +215,14 @@ export const getJobByIdAdmin = async (req, res) => {
     const job = await Job.findOne({
       _id: jobId,
       created_by: userId,
-    }).populate([
-      { path: "applications", select: "applicant" },
-      { path: "company", select: "name" },
+    }).populate([{
+        path: "applications",
+        select: "applicant"
+      },
+      {
+        path: "company",
+        select: "name"
+      },
     ]);
 
     if (!job) {
@@ -218,7 +250,9 @@ export const getAdminJobs = async (req, res) => {
   try {
     const adminId = req.id;
 
-    const jobs = await Job.find({ created_by: adminId }).populate({
+    const jobs = await Job.find({
+      created_by: adminId
+    }).populate({
       path: "company",
       select: "name logo status",
     });
@@ -229,6 +263,32 @@ export const getAdminJobs = async (req, res) => {
         success: false,
       });
     }
+
+    return res.status(200).json({
+      jobs,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};
+
+// [GET] /api/v1/job/getAllJobsForAdmin (ADMIN ONLY - get ALL jobs)
+export const getAllJobsForAdmin = async (req, res) => {
+  try {
+    const jobs = await Job.find({}).populate({
+      path: "company",
+      select: "name logo status",
+    }).populate({
+      path: "created_by",
+      select: "fullName email"
+    }).sort({
+      createdAt: -1
+    });
 
     return res.status(200).json({
       jobs,
@@ -259,7 +319,9 @@ export const EditJob = async (req, res) => {
     } = req.body;
 
     const jobId = req.params.id;
-    const job = await Job.findOne({ _id: jobId });
+    const job = await Job.findOne({
+      _id: jobId
+    });
 
     if (!job) {
       return res.status(404).json({
@@ -302,7 +364,10 @@ export const EditJob = async (req, res) => {
 // [DELETE] /api/v1/job/deleteJob
 export const deleteJob = async (req, res) => {
   try {
-    const { jobId, companyId } = req.body;
+    const {
+      jobId,
+      companyId
+    } = req.body;
 
     const existJob = await Job.findOne({
       _id: jobId,
@@ -368,15 +433,31 @@ export const getJobLocations = async (req, res) => {
 // ADMIN: [GET] /api/v1/job/admin/pending
 export const getPendingJobsForAdmin = async (req, res) => {
   try {
-    const jobs = await Job.find({ status: "PENDING" })
-      .populate({ path: "company", select: "name status" })
-      .populate({ path: "created_by", select: "fullName email role" })
-      .sort({ createdAt: -1 });
+    const jobs = await Job.find({
+        status: "PENDING"
+      })
+      .populate({
+        path: "company",
+        select: "name status"
+      })
+      .populate({
+        path: "created_by",
+        select: "fullName email role"
+      })
+      .sort({
+        createdAt: -1
+      });
 
-    return res.status(200).json({ success: true, jobs });
+    return res.status(200).json({
+      success: true,
+      jobs
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
 
@@ -384,13 +465,22 @@ export const getPendingJobsForAdmin = async (req, res) => {
 export const approveJob = async (req, res) => {
   try {
     const job = await Job.findByIdAndUpdate(
-      req.params.id,
-      { status: "APPROVED", rejectedReason: "" },
-      { new: true }
-    ).populate({ path: "company", select: "name" });
+      req.params.id, {
+        status: "APPROVED",
+        rejectedReason: ""
+      }, {
+        new: true
+      }
+    ).populate({
+      path: "company",
+      select: "name"
+    });
 
     if (!job) {
-      return res.status(404).json({ success: false, message: "Job not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Job not found"
+      });
     }
 
     await Activity.create({
@@ -401,29 +491,44 @@ export const approveJob = async (req, res) => {
       message: `Job "${job.title}" approved${job.company?.name ? ` - ${job.company.name}` : ""}`,
     });
 
-    return res.status(200).json({ success: true, message: "Job approved", job });
+    return res.status(200).json({
+      success: true,
+      message: "Job approved",
+      job
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
 
 // ADMIN: [PUT] /api/v1/job/admin/:id/reject
 export const rejectJob = async (req, res) => {
   try {
-    const { reason } = req.body;
+    const {
+      reason
+    } = req.body;
 
     const job = await Job.findByIdAndUpdate(
-      req.params.id,
-      {
+      req.params.id, {
         status: "REJECTED",
         rejectedReason: reason || "",
-      },
-      { new: true }
-    ).populate({ path: "company", select: "name" });
+      }, {
+        new: true
+      }
+    ).populate({
+      path: "company",
+      select: "name"
+    });
 
     if (!job) {
-      return res.status(404).json({ success: false, message: "Job not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Job not found"
+      });
     }
 
     await Activity.create({
@@ -432,12 +537,21 @@ export const rejectJob = async (req, res) => {
       company: job.company?._id || job.company,
       job: job._id,
       message: `Job "${job.title}" rejected${job.company?.name ? ` - ${job.company.name}` : ""}`,
-      meta: { reason: reason || "" },
+      meta: {
+        reason: reason || ""
+      },
     });
 
-    return res.status(200).json({ success: true, message: "Job rejected", job });
+    return res.status(200).json({
+      success: true,
+      message: "Job rejected",
+      job
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
