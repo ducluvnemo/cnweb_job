@@ -18,9 +18,19 @@ const Job = ({ job }) => {
 
   const dateString = job?.createdAt;
   const date = new Date(dateString);
-  const day = date.getUTCDate();
   const now = new Date();
-  const daynow = now.getUTCDate();
+
+  const diffMs = now - date;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  let dayLabel;
+  if (isNaN(diffDays) || diffDays <= 0) {
+    dayLabel = "Hôm nay";
+  } else if (diffDays === 1) {
+    dayLabel = "1 ngày trước";
+  } else {
+    dayLabel = `${diffDays} ngày trước`;
+  }
 
   const handleAddLaterJob = (jobId, companyId) => {
     try {
@@ -63,7 +73,7 @@ const Job = ({ job }) => {
           <div className='flex items-center gap-2'>
             <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
             <p className='text-sm text-gray-500 font-medium'>
-              {daynow - day === 0 ? <span className='text-green-600'>Hôm nay</span> : `-${daynow - day} ngày trước`}
+              {dayLabel}
             </p>
           </div>
           <button

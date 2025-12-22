@@ -32,9 +32,6 @@ router.get(
         profile: {
           profilePhoto: req.user.avatar || "",
         },
-        // nếu có các trường provider
-        // provider: req.user.provider,
-        // providerId: req.user.providerId,
       });
       await user.save();
       console.log("Created new user from Google OAuth:", user);

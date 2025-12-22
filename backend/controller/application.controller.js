@@ -136,7 +136,6 @@ export const updateStatus = async (req,res) => {
             })
         }
 
-        //find the application by appicantion id
         const application = await Application.findOne({_id: applicationId}).populate('applicant');
         if(!application){
             return res.status(404).json({
@@ -145,11 +144,9 @@ export const updateStatus = async (req,res) => {
             })
         }
 
-        // update the status 
         application.status = status.toLowerCase();
         await application.save();
 
-        // If status is accepted, send automatic "hello" message
         if(status.toLowerCase() === 'accepted') {
             const recruiterId = req.id; // Current user is the recruiter
             const applicantId = application.applicant._id;
@@ -162,7 +159,6 @@ export const updateStatus = async (req,res) => {
                 });
             } catch (error) {
                 console.log("Error sending message:", error);
-                // Don't fail the accept request if message fails
             }
         }
 

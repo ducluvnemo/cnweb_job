@@ -5,6 +5,8 @@ import Job from './Job';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import GetAllLaterJob from './hooks/GetAllLaterJob';
+import UseGetAllJobs from './hooks/UseGetAllJobs';
+
 const Jobs = () => {
   const { allJobs, selectedValueFilter } = useSelector(store => store.job);
   const [fiterJob, setFilterJob] = useState([]);
@@ -30,6 +32,7 @@ const Jobs = () => {
 
   return (
     <div>
+      <UseGetAllJobs /> 
       <Navbar />
 
       <div className='mx-auto max-w-7xl mt-5'>

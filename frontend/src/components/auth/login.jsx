@@ -17,27 +17,31 @@ import { Loader2 } from "lucide-react";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
   const dispatch = useDispatch();
   const { loading, user } = useSelector((store) => store.auth);
+
+  const redirectByRole = (u) => {
+    const r = u?.role;
+    if (r === "admin") navigate("/admin/dashboard");
+    else if (r === "recruiter") navigate("/admin/companies");
+    else navigate("/");
+  };
+
   const onSubmit = async (data) => {
     try {
       dispatch(setLoading(true));
-      console.log("Submitting data:", data);
+
       const res = await axios.post(`${USER_API_END_POINT}/login`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      console.log("Response datsdrea:", res.data);
+
       if (res.data.success) {
         dispatch(setAuthUser(res.data.user));
-        navigate("/");
+        redirectByRole(res.data.user);
+
         toast({
           title: res.data.message,
           status: "success",
@@ -50,7 +54,6 @@ const Login = () => {
         });
       }
     } catch (error) {
-      console.error(error);
       toast({
         title:
           error.response?.data?.message ||
@@ -62,47 +65,48 @@ const Login = () => {
       dispatch(setLoading(false));
     }
   };
+
+  // ✅ FIX: nếu đã login thì redirect theo role (không đá về "/" nữa)
   useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  });
+    if (!user) return;
+    redirectByRole(user);
+  }, [user]); // đủ dùng, tránh loop
+
+  // OAuth callback (?oauth=google|github)
   useEffect(() => {
     const fetchMeIfOAuth = async () => {
       const params = new URLSearchParams(location.search);
       const isOAuth =
         params.get("oauth") === "google" || params.get("oauth") === "github";
 
-      if (isOAuth) {
-        try {
-          console.log("Fetching /auth/me due to OAuth login...");
-          const res = await axios.get("http://localhost:3000/api/v1/auth/me", {
-            withCredentials: true,
+      if (!isOAuth) return;
+
+      try {
+        const res = await axios.get("http://localhost:3000/api/v1/auth/me", {
+          withCredentials: true,
+        });
+
+        if (res.data?.user) {
+          dispatch(setAuthUser(res.data.user));
+          toast({
+            title: `Welcome back ${res.data.user.fullName}`,
+            status: "success",
+            action: <ToastAction altText="OK">OK</ToastAction>,
           });
-          console.log("Fetched /auth/me:", res.data);
-          if (res.data?.user) {
-            dispatch(setAuthUser(res.data.user));
-            toast({
-              title: `Welcome back ${res.data.user.fullName}`,
-              status: "success",
-              action: <ToastAction altText="OK">OK</ToastAction>,
-            });
-            navigate("/");
-          }
-        } catch (_) {
-          // không đăng nhập -> bỏ qua
-        } finally {
-          // xóa query oauth khỏi URL
-          if (isOAuth) {
-            const url = new URL(window.location.href);
-            url.searchParams.delete("oauth");
-            window.history.replaceState({}, "", url);
-          }
+          redirectByRole(res.data.user);
         }
+      } catch (_) {
+        // bỏ qua
+      } finally {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("oauth");
+        window.history.replaceState({}, "", url);
       }
     };
+
     fetchMeIfOAuth();
-  }, [location.search, user, dispatch, navigate]);
+  }, [location.search, dispatch]);
+
   return (
     <div>
       <Navbar />
@@ -138,6 +142,7 @@ const Login = () => {
             )}
           </div>
 
+          {/* role OPTIONAL */}
           <div className="flex items-center justify-between">
             <RadioGroup className="flex items-center gap-4 my-2">
               <div className="flex items-center space-x-2">
@@ -145,7 +150,7 @@ const Login = () => {
                   type="radio"
                   value="student"
                   id="student"
-                  {...register("role", { required: true })}
+                  {...register("role")}
                   className="cursor-pointer"
                 />
                 <Label htmlFor="student">Student</Label>
@@ -155,19 +160,18 @@ const Login = () => {
                   type="radio"
                   value="recruiter"
                   id="recruiter"
-                  {...register("role", { required: true })}
+                  {...register("role")}
                   className="cursor-pointer"
                 />
                 <Label htmlFor="recruiter">Recruiter</Label>
               </div>
             </RadioGroup>
-            {errors.role && (
-              <span className="text-red-500">Vui lòng chọn vai trò</span>
-            )}
+
             <a href="/forgot-password" className="text-blue-600 text-sm">
               Quên mật khẩu?
             </a>
           </div>
+
           {loading ? (
             <Button className="w-full my-4">
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Xin đợi 1 chút
@@ -181,7 +185,6 @@ const Login = () => {
           {/* OAuth login */}
           <div className="my-4">
             <div className="flex items-center gap-3">
-              {/* Google */}
               <a
                 href="http://localhost:3000/api/v1/auth/google"
                 className="w-1/2 inline-flex items-center justify-center bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 px-4 py-2 rounded"
@@ -194,7 +197,6 @@ const Login = () => {
                 Đăng nhập với Google
               </a>
 
-              {/* GitHub */}
               <a
                 href="http://localhost:3000/api/v1/auth/github"
                 className="w-1/2 inline-flex items-center justify-center bg-black text-white hover:bg-gray-800 px-4 py-2 rounded"

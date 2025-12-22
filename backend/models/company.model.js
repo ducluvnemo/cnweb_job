@@ -19,12 +19,15 @@ const companySchemal = new mongoose.Schema({
         type: String, //URL to company
     },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    }
-},{
-    timestamps: true
-});
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["PENDING", "APPROVED", "REJECTED"],
+    default: "PENDING",
+  },
+}, { timestamps: true });
 
 export const Company = mongoose.model("Company", companySchemal);

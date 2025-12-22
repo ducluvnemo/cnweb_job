@@ -70,17 +70,15 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    if (!email || !password || !role) {
+
+    if (!email || !password) {
       return res.status(400).json({
         message: "Something is missing!",
         success: false,
       });
     }
 
-    let user = await User.findOne({
-      email,
-    });
-
+    let user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
         message: "Password or Email incorrect!",
@@ -95,7 +93,6 @@ export const login = async (req, res) => {
       });
     }
 
-    //admin
     if (user.deleted === true) {
       return res.status(400).json({
         message: "Account has been deleted!",
@@ -104,7 +101,6 @@ export const login = async (req, res) => {
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-
     if (!isPasswordMatch) {
       return res.status(400).json({
         message: "Password or Email incorrect!",
@@ -112,7 +108,7 @@ export const login = async (req, res) => {
       });
     }
 
-    if (role !== user.role) {
+    if (role && role !== user.role) {
       return res.status(400).json({
         message: "Account doesn't exist with current role!",
         success: false,
@@ -123,11 +119,11 @@ export const login = async (req, res) => {
       userId: user._id,
     };
 
-    const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {
+    const token = jwt.sign(tokenData, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
 
-    user = {
+    const safeUser = {
       _id: user._id,
       fullName: user.fullName,
       email: user.email,
@@ -136,38 +132,34 @@ export const login = async (req, res) => {
       profile: user.profile,
     };
 
-    return res
-      .status(200)
-      .cookie("token", token, {
-        maxAge: 1 * 24 * 60 * 60 * 1000,
-        httpsOnly: true,
-        sameSite: "strict",
-      })
-      .json({
-        message: `Welcome back ${user.fullName}`,
-        user: user,
-        success: true,
-      });
+   return res
+  .status(200)
+  .cookie("token", token, {
+    maxAge: 1 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,   // dev HTTP
+    path: "/",       
+  })
+  .json({
+    message: `Welcome back ${safeUser.fullName}`,
+    user: safeUser,
+    success: true,
+  });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
   }
 };
 
 //[GET] /api/v1/user/logout
 export const logout = async (req, res) => {
-  try {
-    return res
-      .status(200)
-      .cookie("token", "", {
-        maxAge: 0,
-      })
-      .json({
-        message: "Logout successfully!",
-        success: true,
-      });
-  } catch (error) {
-    console.log(error);
-  }
+  res.clearCookie("token", { path: "/" });
+  res.clearCookie("token", { path: "/api/v1/user" }); // xoá cookie cũ nếu từng set theo path này
+  return res.status(200).json({ message: "Logout successfully!", success: true });
 };
 
 //[POST] /api/v1/user/profile/update
@@ -234,7 +226,6 @@ export const updateProfile = async (req, res) => {
     if (skillsArray) user.profile.skills = skillsArray;
 
     if (cloudResponse) {
-      // Convert to proper raw URL for PDFs
       const finalUrl = isPDF(file.mimetype)
         ? convertToRawUrl(cloudResponse.secure_url)
         : cloudResponse.secure_url;
@@ -494,4 +485,11 @@ export const DeleteAccount = async (req, res) => {
       success: false,
     });
   }
+
 };
+
+export const getApplicants = async (req, res) => {
+  const users = await User.find({ role: "JOB_APPLICANT" });
+  res.json(users);
+};
+

@@ -32,6 +32,7 @@ const JobsTable = () => {
 
     const filteredJob = allAdminJob.filter((job) => {
         if (!searchJobByText) return true;
+        console.log("tri ngu",job?.company)
         return job?.title?.toLowerCase().includes(searchJobByText.toLowerCase()) || job?.company?.name.toLowerCase().includes(searchJobByText.toLowerCase());
     });
 
@@ -65,6 +66,7 @@ const JobsTable = () => {
                         <TableHead>Logo</TableHead>
                         <TableHead>Role</TableHead>
                         <TableHead>Date</TableHead>
+                        <TableHead>Status</TableHead>
                         <TableHead className='text-right'>Action</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -90,6 +92,7 @@ const JobsTable = () => {
                                     </TableCell>
                                     <TableCell>{job?.title}</TableCell>
                                     <TableCell>{date}</TableCell>
+                                    <TableCell>{job?.status}</TableCell>
                                     <TableCell className='cursor-pointer text-right'>
                                         <Popover>
                                             <PopoverTrigger><MoreHorizontal /></PopoverTrigger>

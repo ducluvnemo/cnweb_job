@@ -1,26 +1,56 @@
 import express from "express";
 import isAuthenticated from "../middleware/isAuthenticated.js";
+import isAdmin from "../middleware/isAdmin.js";
 import {
-    deleteJob,
-    EditJob,
-    getAdminJobs,
-    getAllJobs,
-    getJobById,
-    getJobByIdAdmin,
-    getJobPositions,
-    getJobLocations,
-    postJob
+  postJob,
+  getAllJobs,
+  getJobById,
+  getJobByIdAdmin,
+  getAdminJobs,
+  EditJob,
+  deleteJob,
+  getJobPositions,
+  getJobLocations,
+  getPendingJobsForAdmin,
+  approveJob,
+  rejectJob,
 } from "../controller/job.controller.js";
+
 const router = express.Router();
 
-router.route("/post").post(isAuthenticated, postJob);
-router.route("/get").get(isAuthenticated, getAllJobs);
-router.route("/getAdminJob").get(isAuthenticated, getAdminJobs);
-router.route("/get/:id").get(isAuthenticated, getJobById);
-router.route("/getAdmin/:id").get(isAuthenticated, getJobByIdAdmin);
-router.route("/updateJob/:id").patch(isAuthenticated, EditJob);
-router.route("/deleteJob").delete(isAuthenticated, deleteJob);
-router.route("/filters/positions").get(getJobPositions);
-router.route("/filters/locations").get(getJobLocations);
+// recruiter / user
+router.post("/post", isAuthenticated, postJob);
+router.get("/get", getAllJobs);
+router.get("/get/:id", getJobById);
 
-export default router
+// recruiter self
+router.get("/getAdmin/:id", isAuthenticated, getJobByIdAdmin);
+router.get("/getAdminJob", isAuthenticated, getAdminJobs);
+router.patch("/updateJob/:id", isAuthenticated, EditJob);
+router.delete("/deleteJob", isAuthenticated, deleteJob);
+
+// filters
+router.get("/filters/positions", getJobPositions);
+router.get("/filters/locations", getJobLocations);
+
+// admin job approval
+router.get(
+  "/admin/pending",
+  isAuthenticated,
+  isAdmin,
+  getPendingJobsForAdmin
+);
+router.put(
+  "/admin/:id/approve",
+  isAuthenticated,
+  isAdmin,
+  approveJob
+);
+router.put(
+  "/admin/:id/reject",
+  isAuthenticated,
+  isAdmin,
+  rejectJob
+);
+
+export default router;

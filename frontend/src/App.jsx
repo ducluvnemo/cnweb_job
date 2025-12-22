@@ -22,6 +22,11 @@ import ResetPassword from "./components/auth/ResetPassword";
 import CreateUserAdmin from "./components/admin/CreateUserAdmin";
 import ListUserAdmin from "./components/admin/ListUserAdmin";
 import CreateCV from "./components/CreateCV";
+import PendingCompaniesAdmin from "./components/admin/PendingCompaniesAdmin";
+import AdminDashboard from "./components/admin/AdminDashboard";
+import AdminPendingJobs from "./components/admin/AdminPendingJobs";
+
+
 import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -31,33 +36,55 @@ import { toast } from "@/hooks/use-toast";
 import { ToastAction } from "./components/ui/toast";
 
 const appRouter = createBrowserRouter([
+  { path: "/", element: <Home /> },
+  { path: "/login", element: <Login /> },
+  { path: "/signup", element: <SignUp /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/forgot-password/otp", element: <ForgotPasswordOtp /> },
+  { path: "/reset-password/:email", element: <ResetPassword /> },
+  { path: "/jobs", element: <Jobs /> },
+  { path: "/brower", element: <Browse /> },
+{
+    path: "/admin/dashboard",
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <AdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
+
+  // ADMIN routes
   {
-    path: "/",
-    element: <Home />,
+    path: "/admin/pending-companies",
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <PendingCompaniesAdmin />
+      </ProtectedRoute>
+    ),
   },
   {
-    path: "/login",
-    element: <Login />,
+    path: "/admin/pending-jobs",
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <AdminPendingJobs />
+      </ProtectedRoute>
+    ),
   },
   {
-    path: "/signup",
-    element: <SignUp />,
+    path: "/admin/createUser",
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <CreateUserAdmin />
+      </ProtectedRoute>
+    ),
   },
   {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
-  },
-  {
-    path: "/forgot-password/otp",
-    element: <ForgotPasswordOtp />,
-  },
-  {
-    path: "/reset-password/:email",
-    element: <ResetPassword />,
-  },
-  {
-    path: "/jobs",
-    element: <Jobs />,
+    path: "/admin/listUser",
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <ListUserAdmin />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/description/:id",
@@ -66,10 +93,6 @@ const appRouter = createBrowserRouter([
         <JobDescription />
       </ProtectedRouteUser>
     ),
-  },
-  {
-    path: "/brower",
-    element: <Browse />,
   },
   {
     path: "/profile",
@@ -95,11 +118,12 @@ const appRouter = createBrowserRouter([
       </ProtectedRouteUser>
     ),
   },
-  //admin route
+
+  // RECRUITER routes (giữ path cũ của bạn)
   {
     path: "/admin/companies",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["recruiter"]}>
         <CompanyAdmin />
       </ProtectedRoute>
     ),
@@ -107,7 +131,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/companies/create",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["recruiter"]}>
         <CreateCompany />
       </ProtectedRoute>
     ),
@@ -115,15 +139,23 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/companies/:id",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["recruiter"]}>
         <CompanySetupData />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/dashboard",
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <AdminDashboard />
       </ProtectedRoute>
     ),
   },
   {
     path: "/admin/jobs",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["recruiter"]}>
         <JobsAdmin />
       </ProtectedRoute>
     ),
@@ -131,7 +163,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs/:id",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["recruiter"]}>
         <EditJob />
       </ProtectedRoute>
     ),
@@ -139,7 +171,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs/create",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["recruiter"]}>
         <CreateJob />
       </ProtectedRoute>
     ),
@@ -147,15 +179,25 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs/:id/applicants",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["recruiter"]}>
         <Applicants />
+      </ProtectedRoute>
+    ),
+  },
+
+  // ADMIN routes (admin thật sự)
+  {
+    path: "/admin/pending-companies",
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <PendingCompaniesAdmin />
       </ProtectedRoute>
     ),
   },
   {
     path: "/admin/createUser",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["admin"]}>
         <CreateUserAdmin />
       </ProtectedRoute>
     ),
@@ -163,7 +205,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/listUser",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute roles={["admin"]}>
         <ListUserAdmin />
       </ProtectedRoute>
     ),
@@ -174,7 +216,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // bắt lỗi từ OAuth callback (?error=google|github)
     const url = new URL(window.location.href);
     const oauthError = url.searchParams.get("error");
     if (oauthError) {
@@ -183,45 +224,28 @@ function App() {
         status: "error",
         action: <ToastAction altText="Đóng">Đóng</ToastAction>,
       });
-      // xóa param để tránh hiện lại
       url.searchParams.delete("error");
       window.history.replaceState({}, "", url.toString());
     }
 
     const fetchMe = async () => {
       try {
-        const res = await axios.get(`${USER_API_END_POINT}/auth/me`, {
+        const res = await axios.get(`${USER_API_END_POINT}/me`, {
           withCredentials: true,
         });
-        console.log("OAuth /auth/me response:", res.data);
+
         if (res.data?.user) {
           dispatch(setAuthUser(res.data.user));
-          toast({
-            title: "Đăng nhập thành công",
-            status: "success",
-          });
-        } else {
-          toast({
-            title: "Chưa đăng nhập",
-            status: "error",
-          });
         }
       } catch (err) {
-        console.error("OAuth /auth/me error:", err);
-        toast({
-          title: "Không lấy được thông tin người dùng",
-          status: "error",
-        });
+        // Không cần toast ở đây để khỏi spam khi chưa login
       }
     };
+
     fetchMe();
   }, [dispatch]);
 
-  return (
-    <>
-      <RouterProvider router={appRouter} />
-    </>
-  );
+  return <RouterProvider router={appRouter} />;
 }
 
 export default App;
