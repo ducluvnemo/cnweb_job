@@ -11,6 +11,13 @@ import {
     Job
 } from "../models/job.model.js";
 
+// Socket.io instance được set từ index.js
+export let io;
+
+export const setIO = (ioInstance) => {
+    io = ioInstance;
+};
+
 // [POST] /api/v1/message/send/:receiverId
 export const sendMessage = async (req, res) => {
     try {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { X, Send } from 'lucide-react';
@@ -7,6 +7,7 @@ import { addMessage, setSelectedConversation } from './redux/chatSlice';
 import useGetMessages from './hooks/useGetMessages';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from './ui/toast';
+import socketManager from '@/utils/socket';
 
 const CHAT_API_END_POINT = "http://localhost:3000/api/v1/message";
 
@@ -16,9 +17,45 @@ const ChatWindow = ({ onClose, hideBackdrop = false }) => {
     const { user } = useSelector(store => store.auth);
     const [messageContent, setMessageContent] = useState('');
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef(null);
 
     // Fetch messages when conversation changes
     useGetMessages(selectedConversation?.user?._id);
+
+    // Setup Socket.io listeners
+    useEffect(() => {
+        if (!user?._id) return;
+
+        // Connect socket when component mounts
+        socketManager.connect(user._id);
+
+        // Listen for incoming messages from other users
+        socketManager.onReceiveMessage((message) => {
+            // Only add if it's from current conversation
+            if (message.sender._id === selectedConversation?.user?._id) {
+                dispatch(addMessage(message));
+            }
+        });
+
+        // Listen for errors
+        socketManager.onError((error) => {
+            console.error("Socket error:", error);
+            toast({
+                title: error.message || "Socket error",
+                status: "error",
+            });
+        });
+
+        return () => {
+            // Cleanup listeners when component unmounts
+            // Note: Socket stays connected for other features
+        };
+    }, [user?._id, selectedConversation?.user?._id, dispatch]);
+
+    // Auto scroll to latest message
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -43,6 +80,8 @@ const ChatWindow = ({ onClose, hideBackdrop = false }) => {
             setLoading(true);
             const receiverId = selectedConversation.user._id;
             console.log("Sending message to:", receiverId);
+            
+            // Still save to database via HTTP
             const res = await axios.post(
                 `${CHAT_API_END_POINT}/send/${receiverId}`,
                 { content: messageContent },
@@ -50,7 +89,18 @@ const ChatWindow = ({ onClose, hideBackdrop = false }) => {
             );
 
             if (res.data.success) {
-                dispatch(addMessage(res.data.data));
+                const messageData = res.data.data;
+                
+                // Emit via socket to receiver if online
+                socketManager.sendMessage({
+                    receiverId: receiverId,
+                    senderId: user._id,
+                    content: messageContent,
+                    message: messageData
+                });
+                
+                // Add message to UI immediately
+                dispatch(addMessage(messageData));
                 setMessageContent('');
             }
         } catch (error) {
@@ -102,28 +152,31 @@ const ChatWindow = ({ onClose, hideBackdrop = false }) => {
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                 {messages && messages.length > 0 ? (
-                    messages.map((msg, idx) => (
-                        <div
-                            key={idx}
-                            className={`flex ${msg.sender?._id === user?._id ? 'justify-end' : 'justify-start'}`}
-                        >
+                    <>
+                        {messages.map((msg, idx) => (
                             <div
-                                className={`max-w-xs px-4 py-2 rounded-lg ${msg.sender?._id === user?._id
-                                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-br-none'
-                                        : 'bg-gray-300 text-black rounded-bl-none'
-                                    }`}
+                                key={idx}
+                                className={`flex ${msg.sender?._id === user?._id ? 'justify-end' : 'justify-start'}`}
                             >
-                                <p className="text-sm break-words">{msg.content}</p>
-                                <p className={`text-xs mt-1 ${msg.sender?._id === user?._id ? 'text-orange-50' : 'text-gray-500'
-                                    }`}>
-                                    {new Date(msg.createdAt).toLocaleTimeString([], {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    })}
-                                </p>
+                                <div
+                                    className={`max-w-xs px-4 py-2 rounded-lg ${msg.sender?._id === user?._id
+                                            ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-br-none'
+                                            : 'bg-gray-300 text-black rounded-bl-none'
+                                        }`}
+                                >
+                                    <p className="text-sm break-words">{msg.content}</p>
+                                    <p className={`text-xs mt-1 ${msg.sender?._id === user?._id ? 'text-orange-50' : 'text-gray-500'
+                                        }`}>
+                                        {new Date(msg.createdAt).toLocaleTimeString([], {
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        ))}
+                        <div ref={messagesEndRef} />
+                    </>
                 ) : (
                     <div className="flex items-center justify-center h-full text-gray-500">
                         <p>No messages yet. Start a conversation!</p>
