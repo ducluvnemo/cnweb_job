@@ -1,6 +1,5 @@
-import { Popover } from "@radix-ui/react-popover";
 import React, { useState } from "react";
-import { PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { BookUser, LogOut, User2, UserRoundPlus, MessageCircle, FileText } from "lucide-react";
 import { Button } from "../ui/button";
@@ -10,7 +9,7 @@ import store from "../redux/store";
 import { toast } from "@/hooks/use-toast";
 import { ToastAction } from "../ui/toast";
 import axios from "axios";
-import { USER_API_END_POINT } from "../utils/constant";
+import { AUTH_API_END_POINT } from "../utils/constant";
 import { setAuthUser } from "../redux/authSlice";
 import ConversationList from "../ConversationList";
 import ChatWindow from "../ChatWindow";
@@ -25,32 +24,31 @@ const Navbar = () => {
   // dùng avatar cho <img src={avatar} ... />
   const bio = user?.profile?.bio || "";
 
-  const handleLogout = async () => {
-    try {
-      const res = await axios.get(`${USER_API_END_POINT}/logout`, {
-        withCredentials: true,
-      });
-      if (res.data.success) {
-        dispatch(setAuthUser(null));
-        navigate("/");
-        toast({
-          title: res.data.message,
-          status: "success",
-          action: <ToastAction altText="OK">OK</ToastAction>,
-        });
-      }
-    } catch (error) {
-      // Tìm user theo id trong DB
-      const user = await User.findById(id);
-      done(null, user);
-      console.log(error);
+ const handleLogout = async () => {
+  try {
+    const res = await axios.post(
+      `${AUTH_API_END_POINT}/logout`,
+      {},
+      { withCredentials: true }
+    ); // cần withCredentials để gửi cookie [web:37]
+
+    if (res.data?.success) {
+      dispatch(setAuthUser(null));
+      navigate("/login");
       toast({
-        title: error.response?.data?.message,
-        status: "error",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        title: res.data.message,
+        action: <ToastAction altText="OK">OK</ToastAction>,
       });
     }
-  };
+  } catch (error) {
+    console.log(error);
+    toast({
+      title: error.response?.data?.message || "Logout failed",
+      action: <ToastAction altText="Try again">Try again</ToastAction>,
+    });
+  }
+};
+
   return (
     <div>
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">

@@ -24,6 +24,11 @@ import {
   Bar,
 } from "recharts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../redux/authSlice"; // chỉnh path đúng theo project bạn
+import { AUTH_API_END_POINT } from "../utils/constant"; // chỉnh path đúng theo project bạn
+
 
 // ======= UI primitives =======
 function Card({ className = "", children }) {
@@ -279,6 +284,13 @@ export default function AdminDashboard() {
   const [readSet, setReadSet] = useState(() => loadReadSet());
   const [desktopPerm, setDesktopPerm] = useState("default");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+  await axios.post(`${AUTH_API_END_POINT}/logout`, {}, { withCredentials: true });
+  dispatch(setAuthUser(null));
+  navigate("/login");
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -580,6 +592,13 @@ const totalSearchResults = 0;
               <span className="text-xs text-slate-700">Admin</span>
               <ChevronDown size={14} className="text-slate-400" />
             </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+            >
+            Đăng xuất
+            </button>
           </div>
         </div>
       </div>

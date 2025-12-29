@@ -116,4 +116,23 @@ router.get("/logout", (req, res) => {
   });
 });
 
+// routes/auth.route.js (hoặc file route bạn đang dùng)
+
+// Đăng xuất
+router.post("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) return next(err);
+
+    // nếu có express-session
+    if (req.session) req.session.destroy(() => {});
+
+    // clear cả session cookie và JWT cookie
+    res.clearCookie("connect.sid", { path: "/" }); // path phải khớp [web:39]
+    res.clearCookie("token", { path: "/" });       // xoá JWT cookie [web:39]
+
+    return res.status(200).json({ success: true, message: "Logged out" });
+  });
+});
+
+
 export default router;
